@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeatherInsight+ | Advanced Weather Analytics</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Maps uses built-in styling; Leaflet CSS removed -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-cloud-sun"></i>
+                    <h1>WeatherInsight+</h1>
+                </div>
+                <nav class="nav">
+                    <button class="nav-btn active" data-tab="dashboard">
+                        <i class="fas fa-chart-line"></i>
+                        Dashboard
+                    </button>
+                    <button class="nav-btn" data-tab="routes">
+                        <i class="fas fa-route"></i>
+                        Routes
+                    </button>
+                    <button class="nav-btn" data-tab="alerts">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Alerts
+                    </button>
+                    <button class="nav-btn" data-tab="chat">
+                        <i class="fas fa-comments"></i>
+                        Assistant
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Tab -->
+            <div class="tab-content active" id="dashboard">
+                <div class="dashboard-grid">
+                    <!-- Control Panel -->
+                    <div class="control-panel">
+                        <div class="panel-section">
+                            <h3><i class="fas fa-map-marker-alt"></i> Location</h3>
+                            <div class="location-input">
+                                <input type="text" id="locationSearch" placeholder="Search for a city or place...">
+                                <button id="searchLocationBtn" class="btn-secondary" title="Search">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                                <button id="useCurrentLocation" class="btn-secondary" title="Use current location">
+                                    <i class="fas fa-crosshairs"></i>
+                                </button>
+                            </div>
+                            <div class="coordinates-display">
+                                <span id="selectedCoords">No location selected</span>
+                            </div>
+                        </div>
+
+                        <div class="panel-section">
+                            <h3><i class="fas fa-calendar-alt"></i> Date Range</h3>
+                            <div class="date-inputs">
+                                <label>From:</label>
+                                <input type="date" id="startDate">
+                                <label>To:</label>
+                                <input type="date" id="endDate">
+                            </div>
+                            <div class="quick-dates">
+                                <button class="btn-quick" data-range="7">7 Days</button>
+                                <button class="btn-quick" data-range="30">30 Days</button>
+                                <button class="btn-quick" data-range="90">90 Days</button>
+                            </div>
+                        </div>
+
+                        <div class="panel-section">
+                            <h3><i class="fas fa-thermometer-half"></i> Weather Conditions</h3>
+                            <div class="condition-checkboxes">
+                                <label><input type="checkbox" id="temperature" checked> Temperature Extremes</label>
+                                <label><input type="checkbox" id="precipitation" checked> Precipitation</label>
+                                <label><input type="checkbox" id="wind" checked> Wind Speed</label>
+                                <label><input type="checkbox" id="humidity" checked> Humidity</label>
+                                <label><input type="checkbox" id="airQuality" checked> Air Quality</label>
+                            </div>
+                        </div>
+
+                        <button id="analyzeWeather" class="btn-primary">
+                            <i class="fas fa-search"></i>
+                            Analyze Weather
+                        </button>
+                    </div>
+
+                    <!-- Map Container -->
+                    <div class="map-container">
+                        <div id="map"></div>
+                        <div class="map-controls">
+                            <button id="drawBoundary" class="map-btn">
+                                <i class="fas fa-draw-polygon"></i>
+                                Draw Area
+                            </button>
+                            <button id="clearMap" class="map-btn">
+                                <i class="fas fa-trash"></i>
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Results Panel -->
+                    <div class="results-panel">
+                        <div class="results-header">
+                            <h3><i class="fas fa-chart-bar"></i> Weather Analysis</h3>
+                            <div class="export-buttons">
+                                <button id="exportCSV" class="btn-export">
+                                    <i class="fas fa-file-csv"></i>
+                                    CSV
+                                </button>
+                                <button id="exportJSON" class="btn-export">
+                                    <i class="fas fa-file-code"></i>
+                                    JSON
+                                </button>
+                            </div>
+                        </div>
+                        <div id="resultsContent" class="results-content">
+                            <div class="no-data">
+                                <i class="fas fa-cloud-sun"></i>
+                                <p>Select a location and date range to begin analysis</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Routes Tab -->
+            <div class="tab-content" id="routes">
+                <div class="routes-container">
+                    <div class="route-input">
+                        <h3><i class="fas fa-route"></i> Route Weather Analysis</h3>
+                        <div class="route-points">
+                            <input type="text" id="routeStart" placeholder="Starting point...">
+                            <input type="text" id="routeEnd" placeholder="Destination...">
+                            <button id="addWaypoint" class="btn-secondary">Add Waypoint</button>
+                        </div>
+                        <button id="analyzeRoute" class="btn-primary">Analyze Route</button>
+                        <div id="routeSummary" class="route-summary" aria-live="polite"></div>
+                    </div>
+                    <div id="routeMap" class="route-map"></div>
+                </div>
+            </div>
+
+            <!-- Alerts Tab -->
+            <div class="tab-content" id="alerts">
+                <div class="alerts-container">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Weather Alerts</h3>
+                    <div class="alert-settings">
+                        <div class="alert-preferences">
+                            <h4>Alert Preferences</h4>
+                            <label><input type="checkbox" id="alertTemp"> Temperature Warnings</label>
+                            <label><input type="checkbox" id="alertPrecip"> Precipitation Alerts</label>
+                            <label><input type="checkbox" id="alertWind"> Wind Warnings</label>
+                            <label><input type="checkbox" id="alertAir"> Air Quality Alerts</label>
+                        </div>
+                    </div>
+                    <div id="alertsList" class="alerts-list">
+                        <div class="no-alerts">
+                            <i class="fas fa-shield-alt"></i>
+                            <p>No active alerts</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Assistant Tab -->
+            <div class="tab-content" id="chat">
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <h3><i class="fas fa-robot"></i> Weather Assistant</h3>
+                    </div>
+                    <div id="chatMessages" class="chat-messages">
+                        <div class="message bot-message">
+                            <div class="message-content">
+                                <p>Hello! I'm your WeatherInsight+ assistant. I can help you understand weather probabilities, suggest alternative locations, and provide recommendations based on weather conditions. How can I help you today?</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="chatInput" placeholder="Ask me about weather conditions...">
+                        <button id="sendMessage" class="btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Analyzing weather data...</p>
+            </div>
+        </div>
+
+        <!-- Alert Modal -->
+        <div id="alertModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="alertContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Routes Tab -->
+    <div class="tab-content" id="routes">
+        <div class="routes-container">
+            <div class="route-input">
+                <h3><i class="fas fa-route"></i> Route Weather Analysis</h3>
+                <div class="route-points">
+                    <input type="text" id="routeStart" placeholder="Starting point...">
+                    <input type="text" id="routeEnd" placeholder="Destination...">
+                    <button id="addWaypoint" class="btn-secondary">Add Waypoint</button>
+                </div>
+                <button id="analyzeRoute" class="btn-primary">Analyze Route</button>
+            </div>
+            <div id="routeMap" class="route-map"></div>
+            <div id="routeResults" class="route-results"></div>
+        </div>
+    </div>
+
+    <!-- Alerts Tab -->
+    <div class="tab-content" id="alerts">
+        <div class="alerts-container">
+            <h3><i class="fas fa-exclamation-triangle"></i> Weather Alerts</h3>
+            <div class="alert-settings">
+                <div class="alert-preferences">
+                    <h4>Alert Preferences</h4>
+                    <label><input type="checkbox" id="alertTemp"> Temperature Warnings</label>
+                    <label><input type="checkbox" id="alertPrecip"> Precipitation Alerts</label>
+                    <label><input type="checkbox" id="alertWind"> Wind Warnings</label>
+                    <label><input type="checkbox" id="alertAir"> Air Quality Alerts</label>
+                </div>
+            </div>
+            <div id="alertsList" class="alerts-list">
+                <div class="no-alerts">
+                    <i class="fas fa-shield-alt"></i>
+                    <p>No active alerts</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Assistant Tab -->
+    <div class="tab-content" id="chat">
+        <div class="chat-container">
+            <div class="chat-header">
+                <h3><i class="fas fa-robot"></i> Weather Assistant</h3>
+            </div>
+            <div id="chatMessages" class="chat-messages">
+                <div class="message bot-message">
+                    <div class="message-content">
+                        <p>Hello! I'm your WeatherInsight+ assistant. I can help you understand weather probabilities, suggest alternative locations, and provide recommendations based on weather conditions. How can I help you today?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="Ask me about weather conditions...">
+                <button id="sendMessage" class="btn-primary">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Loading Overlay -->
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>Analyzing weather data...</p>
+    </div>
+</div>
+
+<!-- Alert Modal -->
+<div id="alertModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="alertContent"></div>
+    </div>
+</div>
+</div>
+
+<!-- Scripts -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_SewkJPZPIsBQ_1_Md-pKIx-3zR5SZAA&libraries=drawing,geometry&v=weekly"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

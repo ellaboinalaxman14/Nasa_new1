@@ -1,0 +1,85 @@
+{
+  "name": "weatherinsight-plus",
+  "version": "1.0.0",
+  "description": "Advanced weather analytics application leveraging NASA Earth observation data for probability-based weather forecasting",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx live-server --port=8080",
+    "build": "echo 'No build process required for static site'",
+    "test": "echo 'Tests will be added in future versions'",
+    "lint": "npx eslint app.js config.js",
+    "format": "npx prettier --write *.js *.css *.html",
+    "serve": "python -m http.server 8000"
+  },
+  "keywords": [
+    "weather",
+    "nasa",
+    "earth-observation",
+    "climate",
+    "forecasting",
+    "probability",
+    "analytics",
+    "mapping",
+    "visualization",
+    "outdoor",
+    "travel",
+    "planning"
+  ],
+  "author": "WeatherInsight+ Development Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/weatherinsight-plus.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/weatherinsight-plus/issues"
+  },
+  "homepage": "https://your-username.github.io/weatherinsight-plus",
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "prettier": "^2.8.0",
+    "live-server": "^1.2.2",
+    "serve": "^14.0.0"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie <= 11"
+  ],
+  "files": [
+    "index.html",
+    "styles.css",
+    "app.js",
+    "config.js",
+    "README.md",
+    "assets/"
+  ],
+  "config": {
+    "port": 8080,
+    "host": "localhost"
+  },
+  "peerDependencies": {},
+  "optionalDependencies": {},
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/your-username"
+  },
+  "contributors": [
+    {
+      "name": "Your Name",
+      "email": "your.email@example.com",
+      "url": "https://github.com/your-username"
+    }
+  ],
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  }
+}
